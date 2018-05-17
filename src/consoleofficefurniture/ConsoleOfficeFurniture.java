@@ -55,6 +55,10 @@ public class ConsoleOfficeFurniture {
                 case 5: listTotalPrice();
                     choice = menu();
                	break;
+                
+                case 6: saveToFile();
+                    choice = menu();
+               	break;
             }
         }
         
@@ -74,11 +78,12 @@ public class ConsoleOfficeFurniture {
                     	"3. Add Desk \n" +
                         "4. Clear \n" +
                         "5. Total Price \n" +
+                        "6. Save \n" +
                     	"0. Exit");
         	
         	choice = keyboard.nextInt();
     	}
-    	while (choice < 0 || choice > 6);
+    	while (choice < 0 || choice > 7);
     	
     	return choice;
     }// end menu
@@ -126,6 +131,11 @@ public class ConsoleOfficeFurniture {
         System.out.println("\n The total price is £"+totalPrice);
     }
     
+    // save to file function - add comments here!!!!
+    static void saveToFile()
+    {
+        
+    }
     
     
     static void addChair(){
