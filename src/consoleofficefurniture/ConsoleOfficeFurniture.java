@@ -8,6 +8,7 @@ package consoleofficefurniture;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 import javax.swing.*;
 import org.json.simple.JSONArray;
@@ -118,23 +119,20 @@ public class ConsoleOfficeFurniture {
         totalPrice = 0;
         
         // list though all chair classes
-        for(Chair singleChair : aChair)
-        {
+        aChair.forEach((singleChair) -> {
             totalPrice = totalPrice + (singleChair.getTotalPrice());
-        }
+        });
         
         
         // list though all Desk classes
-        for(Desk singleDesk : aDesk)
-        {
+        aDesk.forEach((singleDesk) -> {
             totalPrice = totalPrice + (singleDesk.getTotalPrice());
-        }
+        });
         
         // list though all Table classes
-        for(Table singleTable : aTable)
-        {
+        aTable.forEach((singleTable) -> {
             totalPrice = totalPrice + (singleTable.getTotalPrice());
-        }
+        });
         
         
         
