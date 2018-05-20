@@ -8,7 +8,9 @@ package consoleofficefurniture;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 import javax.swing.*;
 import org.json.simple.JSONArray;
@@ -20,12 +22,8 @@ import org.json.simple.JSONObject;
  * @author nevil
  */
 public class ConsoleOfficeFurniture {
-
-    static FurnitureItem newFurnitureItem = new FurnitureItem();
-    
-    static ArrayList<Chair> aChair = new ArrayList<>();
-    static ArrayList<Table> aTable = new ArrayList<>();
-    static ArrayList<Desk> aDesk = new ArrayList<>();
+ 
+    static ArrayList<FurnitureItem> aCollectionAll = new ArrayList<>();
     
     static double totalPrice = 0;
     
@@ -103,9 +101,7 @@ public class ConsoleOfficeFurniture {
     // reset application
     static void clear()
     {
-        aChair.clear();
-        aTable.clear();
-        aDesk.clear();
+        aCollectionAll.clear();
         
         totalPrice = 0;
         
@@ -119,22 +115,9 @@ public class ConsoleOfficeFurniture {
         totalPrice = 0;
         
         // list though all chair classes
-        aChair.forEach((singleChair) -> {
-            totalPrice = totalPrice + (singleChair.getTotalPrice());
+        aCollectionAll.forEach((singleItem) -> {
+            totalPrice = totalPrice + (singleItem.getTotalPrice());
         });
-        
-        
-        // list though all Desk classes
-        aDesk.forEach((singleDesk) -> {
-            totalPrice = totalPrice + (singleDesk.getTotalPrice());
-        });
-        
-        // list though all Table classes
-        aTable.forEach((singleTable) -> {
-            totalPrice = totalPrice + (singleTable.getTotalPrice());
-        });
-        
-        
         
         System.out.println("\n The total price is £"+totalPrice);
     }
@@ -150,9 +133,7 @@ public class ConsoleOfficeFurniture {
         JSONArray jsonArrayDesk = new JSONArray();
         JSONArray jsonArrayTable = new JSONArray();
         
-        jsonArrayChair.add(aChair);
-        jsonArrayDesk.add(aDesk);
-        jsonArrayTable.add(aTable);
+        //jsonArrayChair.add(aChair);
         
         obj.put("Chairs", jsonArrayChair );
         obj.put("Desks", jsonArrayDesk );
@@ -176,13 +157,20 @@ public class ConsoleOfficeFurniture {
     // display summary of order in asending order of price
     static void displaySummary()
     {
+        //List<Chair> chairs = new ArrayList<Chair>();
+        // Sort by weight:
+        Collections.sort(aCollectionAll, new ItemPriceComparator());
         
         
+        // list though all chair classes
+        aCollectionAll.forEach((singleChair) -> {
+            System.out.println("\n "+singleChair.toString());
+        });
     }
     
     static void addChair(){
     	
-        Chair newChair = new Chair();
+        FurnitureItem newChair = new Chair();
         
     	int idNum;
     	char typeOfWood;
@@ -223,8 +211,8 @@ public class ConsoleOfficeFurniture {
         totalPrice = totalPrice + (newChair.getItemPrice() * newChair.getQuantity());
         
         // add Chair to collection
-        aChair.add(newChair);
-        
+        //aChair.add(newChair);
+        aCollectionAll.add(newChair);
     	System.out.println("\nSUMMARY : " + newChair.toString());
     	//System.out.printf("Units : £%.2f\n\n",newChair.calcUnits());
     	//System.out.printf("Item Price : £%.2f\n\n",newChair.itemPrice());  	
@@ -235,7 +223,7 @@ public class ConsoleOfficeFurniture {
     
     static void addTable(){
     	
-        Table newTable = new Table();
+        FurnitureItem newTable = new Table();
         
     	int idNum;
     	char typeOfWood;
@@ -283,7 +271,7 @@ public class ConsoleOfficeFurniture {
     	newTable = new Table(idNum, typeOfWood, quantity, diameter, baseType);
     	
         // add table to the table collection
-        aTable.add(newTable);
+        aCollectionAll.add(newTable);
         
     	System.out.println("\nSUMMARY : " + newTable.toString());
     	//System.out.printf("Units : £%.2f\n\n",newChair.calcUnits());
@@ -295,7 +283,7 @@ public class ConsoleOfficeFurniture {
     
     static void addDesk(){
     	
-        Desk newDesk = new Desk();
+        FurnitureItem newDesk = new Desk();
         
     	int idNum;
     	char typeOfWood;
@@ -333,7 +321,7 @@ public class ConsoleOfficeFurniture {
     	newDesk = new Desk(idNum, typeOfWood, quantity, width, depth, numOfDraws);
     	
         // add new desk to desk collection
-        aDesk.add(newDesk);
+        aCollectionAll.add(newDesk);
         
     	System.out.println("\nSUMMARY : " + newDesk.toString());
     	//System.out.printf("Units : £%.2f\n\n",newChair.calcUnits());
@@ -342,3 +330,9 @@ public class ConsoleOfficeFurniture {
     }// end add desk
     
 }// end class
+
+class ItemPriceComparator implements Comparator<FurnitureItem> {
+    public int compare(FurnitureItem item1, FurnitureItem item2) {
+        return (int)item1.getTotalPrice()- (int)item2.getTotalPrice();
+    }
+}
