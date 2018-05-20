@@ -5,16 +5,17 @@
  */
 package consoleofficefurniture;
 
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import javax.swing.*;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 
 /**
@@ -30,7 +31,7 @@ public class ConsoleOfficeFurniture {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
         // TODO code application logic here
         
         int choice = menu();
@@ -60,6 +61,10 @@ public class ConsoleOfficeFurniture {
                	break;
                 
                 case 6: saveToFile();
+                    choice = menu();
+               	break;
+                
+                case 7: loadFromFile();
                     choice = menu();
                	break;
                 
@@ -125,28 +130,28 @@ public class ConsoleOfficeFurniture {
     // save to file function - NOT WORKING need to look at later!!
     static void saveToFile()
     {
-        JSONObject obj = new JSONObject();
-        obj.put("Name", "crunchify.com");
-        obj.put("Author", "App Shah");
-
-        JSONArray jsonArrayChair = new JSONArray();
-        JSONArray jsonArrayDesk = new JSONArray();
-        JSONArray jsonArrayTable = new JSONArray();
-        
-        //jsonArrayChair.add(aChair);
-        
-        obj.put("Chairs", jsonArrayChair );
-        obj.put("Desks", jsonArrayDesk );
-        obj.put("Tables", jsonArrayTable );
-
-        // try-with-resources statement based on post comment below :)
         try {
-            FileWriter file = new FileWriter("file1.dat");
-            file.write(obj.toJSONString());
-            System.out.println("Successfully Copied JSON Object to File...");
-            System.out.println("\nJSON Object: " + obj);
-            file.flush();
-            file.close();
+            FileOutputStream fos = new FileOutputStream("file1.dat");
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(aCollectionAll);
+            oos.close();
+            System.out.println("\n File Saved!");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    static void loadFromFile() throws ClassNotFoundException
+    {
+        try {
+            FileInputStream fis = new FileInputStream("file1.dat");
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            aCollectionAll = (ArrayList<FurnitureItem>) ois.readObject();
+            ois.close();
+            System.out.println("\n File loaded!");
         }
         catch (IOException e)
         {
